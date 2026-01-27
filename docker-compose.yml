@@ -1,0 +1,20 @@
+services:
+  app:
+    build: .
+    container_name: inspien-app
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      - ORDER_DB_URL=${ORDER_DB_URL}
+      - ORDER_DB_USERNAME=${ORDER_DB_USERNAME}
+      - ORDER_DB_PASSWORD=${ORDER_DB_PASSWORD}
+      - SFTP_HOST=${SFTP_HOST}
+      - SFTP_PORT=${SFTP_PORT}
+      - SFTP_USERNAME=${SFTP_USERNAME}
+      - SFTP_PASSWORD=${SFTP_PASSWORD}
+      - SFTP_REMOTE_PATH=${SFTP_REMOTE_PATH}
+      - APPLICANT_KEY=${APPLICANT_KEY}
+      - APPLICANT_NAME=${APPLICANT_NAME}
+    restart: always
