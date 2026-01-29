@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class LoggerTest {
 
     private Logger logger;
-    private static final Path LOG_PATH = Path.of("logs/integration.log");
+    private static final Path LOG_PATH = Path.of("logs/integration.txt");
 
     @BeforeEach
     void setUp() throws IOException {
