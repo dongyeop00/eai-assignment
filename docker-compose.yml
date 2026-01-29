@@ -4,9 +4,12 @@ services:
     container_name: springboot-container
     ports:
       - "8080:8080"
+    volumes:
+      - ./logs:/app/logs
     env_file:
       - .env
     environment:
+      - TZ=Asia/Seoul
       - ORDER_DB_URL=${ORDER_DB_URL}
       - ORDER_DB_USERNAME=${ORDER_DB_USERNAME}
       - ORDER_DB_PASSWORD=${ORDER_DB_PASSWORD}
