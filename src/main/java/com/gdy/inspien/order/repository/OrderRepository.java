@@ -6,6 +6,9 @@ import com.gdy.inspien.order.dto.OrderDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -26,8 +29,7 @@ public class OrderRepository {
      */
     public void save(OrderDTO order) {
         String sql = """
-            INSERT INTO ORDER_TB 
-            (ORDER_ID, USER_ID, ITEM_ID, APPLICANT_KEY, NAME, ADDRESS, ITEM_NAME, PRICE, STATUS)
+            INSERT INTO ORDER_TB (ORDER_ID, USER_ID, ITEM_ID, APPLICANT_KEY, NAME, ADDRESS, ITEM_NAME, PRICE, STATUS)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """;
         try {
@@ -42,8 +44,15 @@ public class OrderRepository {
                     order.getPrice(),
                     order.getStatus()
             );
+
             log.info("주문 저장 완료: ORDER_ID={}, APPLICANT_KEY={}", order.getOrderId(), order.getApplicantKey());
-        } catch (Exception e) {
+        } catch (DuplicateKeyException e) {
+            log.error("주문 저장 실패 - 중복 키: ORDER_ID={}", order.getOrderId());
+            throw new IntegrationException(ErrorCode.DB_DUPLICATE_KEY_ERROR, e);
+        } catch (DataIntegrityViolationException e) {
+            log.error("주문 저장 실패 - 무결성 위반: {}", e.getMessage());
+            throw new IntegrationException(ErrorCode.DB_DATA_INTEGRITY_ERROR, e);
+        } catch (DataAccessException e) {
             log.error("주문 저장 실패: {}", e.getMessage());
             throw new IntegrationException(ErrorCode.DB_INSERT_ERROR, e);
         }
@@ -81,7 +90,7 @@ public class OrderRepository {
                             .build(),
                     applicantKey
             );
-        } catch (Exception e) {
+        } catch (DataAccessException e) {
             log.error("미전송 주문 조회 실패: {}", e.getMessage());
             throw new IntegrationException(ErrorCode.DB_SELECT_ERROR, e);
         }
@@ -99,7 +108,7 @@ public class OrderRepository {
         try {
             jdbcTemplate.update(sql, status, orderId, applicantKey);
             log.info("주문 상태 업데이트: ORDER_ID={}, STATUS={}", orderId, status);
-        } catch (Exception e) {
+        } catch (DataAccessException e) {
             log.error("주문 상태 업데이트 실패: {}", e.getMessage());
             throw new IntegrationException(ErrorCode.DB_UPDATE_ERROR, e);
         }
@@ -112,7 +121,8 @@ public class OrderRepository {
         String sql = "SELECT MAX(ORDER_ID) FROM ORDER_TB WHERE APPLICANT_KEY = ?";
         try {
             return jdbcTemplate.queryForObject(sql, String.class, applicantKey);
-        } catch (Exception e) {
+        } catch (DataAccessException e) {
+            log.warn("최대 ORDER_ID 조회 실패 (데이터 없음 가능): {}", e.getMessage());
             return null;
         }
     }
