@@ -2,6 +2,8 @@ package com.gdy.inspien.global.logging;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 @Component
 public class Logger {
 
-    private static final String LOG_FILE_PATH = "logs/integration.log";
+    private static final String LOG_FILE_PATH = "logs/integration.txt";
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     /**
@@ -42,8 +44,20 @@ public class Logger {
         log.info(message);
     }
 
+    /**
+     * 쓰기 작업
+     * @param message : 기록할 메세지
+     */
     private void writeLog(String message) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(LOG_FILE_PATH, true))) {
+        File logFile = new File(LOG_FILE_PATH);
+        File parentDir = logFile.getParentFile();
+        
+        // 부모 디렉토리가 없으면 생성
+        if (parentDir != null && !parentDir.exists()) {
+            parentDir.mkdirs();
+        }
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(logFile, true))) {
             writer.println(message);
         } catch (IOException e) {
             log.error("로그 파일 기록 실패: {}", e.getMessage());
