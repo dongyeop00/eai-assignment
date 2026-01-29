@@ -20,4 +20,5 @@ services:
       - SFTP_REMOTE_PATH=${SFTP_REMOTE_PATH}
       - APPLICANT_KEY=${APPLICANT_KEY}
       - APPLICANT_NAME=${APPLICANT_NAME}
+      - SCHEDULE_TIME=${SCHEDULE_TIME}
     restart: always
