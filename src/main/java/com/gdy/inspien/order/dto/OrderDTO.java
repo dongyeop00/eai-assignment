@@ -2,9 +2,11 @@ package com.gdy.inspien.order.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @Builder
+@ToString
 public class OrderDTO {
 
     private String orderId;
