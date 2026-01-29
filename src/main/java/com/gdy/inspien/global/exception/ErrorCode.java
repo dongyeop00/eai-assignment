@@ -13,6 +13,8 @@ public enum ErrorCode {
     DB_SELECT_ERROR("DB003", "데이터 조회에 실패했습니다"),
     DB_UPDATE_ERROR("DB004", "데이터 수정에 실패했습니다"),
     DB_DELETE_ERROR("DB005", "데이터 삭제에 실패했습니다"),
+    DB_DUPLICATE_KEY_ERROR("DB006", "중복된 키가 존재합니다"),
+    DB_DATA_INTEGRITY_ERROR("DB007", "데이터 무결성 제약 조건을 위반했습니다"),
 
     // SFTP 관련
     SFTP_CONNECTION_ERROR("SFTP001", "SFTP 서버 연결에 실패했습니다"),
