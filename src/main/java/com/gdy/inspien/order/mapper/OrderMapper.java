@@ -22,7 +22,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class OrderMapper {
 
-    private final IdGenerator idGenerator;
+    private final IdGenerator orderIdGenerator;
 
     @Value("${APPLICANT_KEY}")
     private String applicantKey;
@@ -63,7 +63,7 @@ public class OrderMapper {
             }
 
             OrderDTO dto = OrderDTO.builder()
-                    .orderId(idGenerator.generate())
+                    .orderId(orderIdGenerator.generate())
                     .userId(item.getUserId())
                     .itemId(item.getItemId())
                     .applicantKey(applicantKey)
