@@ -1,10 +1,7 @@
 package com.gdy.inspien.global.util;
 
-import org.springframework.stereotype.Component;
-
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Component
 public class IdGenerator {
 
     private final AtomicInteger counter = new AtomicInteger(0);
