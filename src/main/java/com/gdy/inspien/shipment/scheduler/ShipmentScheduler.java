@@ -1,17 +1,22 @@
 package com.gdy.inspien.shipment.scheduler;
 
 import com.gdy.inspien.shipment.service.ShipmentService;
+import com.gdy.inspien.shipment.service.impl.ShipmentServiceSingleImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class ShipmentScheduler {
 
     private final ShipmentService shipmentService;
+
+    public ShipmentScheduler(@Qualifier("ShipmentBatch")ShipmentService shipmentService) {
+        this.shipmentService = shipmentService;
+    }
 
     /**
      * 5분 주기로 운송 배치 실행
