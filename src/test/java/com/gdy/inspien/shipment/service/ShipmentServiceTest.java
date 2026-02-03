@@ -6,6 +6,7 @@ import com.gdy.inspien.order.dto.OrderDTO;
 import com.gdy.inspien.order.repository.OrderRepository;
 import com.gdy.inspien.shipment.dto.ShipmentDTO;
 import com.gdy.inspien.shipment.repository.ShipmentRepository;
+import com.gdy.inspien.shipment.service.impl.ShipmentServiceSingleImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,7 @@ class ShipmentServiceTest {
     private Logger integrationLogger;
 
     @InjectMocks
-    private ShipmentService shipmentService;
+    private ShipmentServiceSingleImpl shipmentService;
 
     private OrderDTO testOrder;
 
