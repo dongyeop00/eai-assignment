@@ -3,8 +3,8 @@ package com.gdy.inspien.order.controller;
 import com.gdy.inspien.global.response.ApiResponse;
 import com.gdy.inspien.order.dto.OrderDTO;
 import com.gdy.inspien.order.service.OrderService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,10 +16,13 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api/orders")
-@RequiredArgsConstructor
 public class OrderController {
 
     private final OrderService orderService;
+
+    public OrderController(@Qualifier("OrderBatch")OrderService orderService) {
+        this.orderService = orderService;
+    }
 
     /**
      * 주문 생성 API
