@@ -9,8 +9,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
 
 @Slf4j
 @Repository
@@ -50,6 +55,28 @@ public class ShipmentRepository {
             log.error("운송 저장 실패: {}", e.getMessage());
             throw new IntegrationException(ErrorCode.DB_INSERT_ERROR, e);
         }
+    }
+
+    /**
+     * 운송 데이터 배치 저장
+     */
+    public void saveAllBatch(List<ShipmentDTO> shipments) {
+        String sql = "INSERT INTO SHIPMENT_TB (SHIPMENT_ID, ORDER_ID, ITEM_ID, APPLICANT_KEY, ADDRESS) VALUES (?, ?, ?, ?, ?)";
+
+        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                ShipmentDTO shipment = shipments.get(i);
+                ps.setString(1, shipment.getShipId());
+                ps.setString(2, shipment.getOrderId());
+                ps.setString(3, shipment.getItemId());
+                ps.setString(4, shipment.getApplicantKey());
+                ps.setString(5, shipment.getAddress());
+            }
+
+            @Override
+            public int getBatchSize() { return shipments.size(); }
+        });
     }
 
     /**
