@@ -68,17 +68,12 @@ public class SftpClient {
     private Session createSession() {
         try {
             JSch jsch = new JSch();
-            Session session = jsch.getSession(
-                    sftpConfig.getUsername(),
-                    sftpConfig.getHost(),
-                    sftpConfig.getPort()
-            );
+            Session session = jsch.getSession(sftpConfig.getUsername(), sftpConfig.getHost(), sftpConfig.getPort());
             session.setPassword(sftpConfig.getPassword());
             session.setConfig("StrictHostKeyChecking", "no");
             session.connect();
 
-            log.debug("SFTP 세션 연결 성공: {}@{}:{}",
-                    sftpConfig.getUsername(), sftpConfig.getHost(), sftpConfig.getPort());
+            log.debug("SFTP 세션 연결 성공: {}@{}:{}", sftpConfig.getUsername(), sftpConfig.getHost(), sftpConfig.getPort());
             return session;
 
         } catch (JSchException e) {
